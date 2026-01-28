@@ -7,50 +7,48 @@
 @layer base {
   :root {
     /* Backgrounds */
-    --background: 210 40% 98%; /* #F8FAFC */
-    --foreground: 222 47% 11%; /* #0F172A */
+    --background: 260 7% 97%; /* #F8F8F9 - Off-White */
+    --foreground: 338 32% 13%; /* #2B151E - Primary Text */
 
-    --card: 0 0% 100%; /* #FFFFFF */
-    --card-foreground: 222 47% 11%; /* #0F172A */
+    --card: 0 0% 100%; /* #FEFEFE - Pure White */
+    --card-foreground: 338 32% 13%; /* #2B151E */
 
-    --popover: 0 0% 100%; /* #FFFFFF */
-    --popover-foreground: 222 47% 11%; /* #0F172A */
+    --popover: 0 0% 100%; /* #FEFEFE */
+    --popover-foreground: 338 32% 13%; /* #2B151E */
 
-    /* Primary - Brand / Action */
-    --primary: 217 91% 60%; /* #2563EB */
-    --primary-foreground: 0 0% 100%; /* white */
+    /* Primary - Deep Wine / Brand */
+    --primary: 313 33% 31%; /* #68345D */
+    --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Accent */
-    --secondary: 173 80% 40%; /* #14B8A6 */
-    --secondary-foreground: 0 0% 100%; /* white */
+    /* Secondary - Bright Pink Accent */
+    --secondary: 333 72% 76%; /* #EC97BD */
+    --secondary-foreground: 338 32% 13%; /* #2B151E */
 
     /* Muted */
-    --muted: 210 40% 96%; /* #F1F5F9 */
-    --muted-foreground: 215 16% 47%; /* #475569 */
+    --muted: 300 6% 95%; /* #F2EFF2 - Light Gray */
+    --muted-foreground: 244 8% 59%; /* #8B89A2 - Secondary Text */
 
-    /* Accent */
-    --accent: 220 80% 95%; /* #EAF0FF - soft bg */
-    --accent-foreground: 217 91% 60%; /* #2563EB */
+    /* Accent - Soft Pink */
+    --accent: 333 54% 89%; /* #F4D1E1 */
+    --accent-foreground: 313 33% 31%; /* #68345D */
 
     /* Destructive */
-    --destructive: 0 84% 60%; /* #EF4444 */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
     /* Borders */
-    --border: 214 32% 91%; /* #E2E8F0 */
-    --input: 214 32% 91%; /* #E2E8F0 */
-    --ring: 217 91% 60%; /* #2563EB */
+    --border: 270 6% 90%; /* #E6E4E9 - Divider */
+    --input: 240 4% 85%; /* #D7D7DB - Light Border */
+    --ring: 313 33% 31%; /* #68345D */
 
     --radius: 0.5rem;
 
     --font-mono: 'JetBrains Mono', monospace;
     --font-sans: 'Inter', sans-serif;
 
-    /* Status Colors */
-    --success: 142 71% 45%; /* #22C55E */
-    --warning: 38 92% 50%; /* #F59E0B */
-    --error: 0 84% 60%; /* #EF4444 */
-    --info: 217 91% 60%; /* #3B82F6 */
+    /* Additional UI Colors */
+    --disabled: 240 5% 72%; /* #B0B1BA */
+    --muted-ui: 232 5% 79%; /* #C4C5CC */
   }
 }
 
