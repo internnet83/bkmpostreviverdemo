@@ -8,7 +8,8 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-// it works
+// changes in lovable brach relect in lovable project
+// changes from main brach which will be meged to lovable is visible
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
