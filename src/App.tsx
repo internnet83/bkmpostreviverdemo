@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// it works
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
