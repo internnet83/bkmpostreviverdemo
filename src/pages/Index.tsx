@@ -16,15 +16,60 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-// interface ReceivedMessage {
-//   id: number;
-//   origin: string;
-//   data: unknown;
-//   timestamp: Date;
-//   isValid: boolean;
-// }
+interface ReceivedMessage {
+  id: number;
+  origin: string;
+  data: unknown;
+  timestamp: Date;
+  isValid: boolean;
+}
 
-const ALLOWED_ORIGINS: string[] = ["*"];
+const historyItems = [
+  {
+    title: "Enhanced greeting flow",
+    status: "Active",
+    statusColor: "text-green-600",
+    score: "Score: 94/100",
+    date: "Jan 15, 2025",
+    description: "Improved user engagement with personalized greetings",
+    metrics: { p: "0.92", u: "0.88" },
+    tags: [
+      { label: "High conversion rate", color: "bg-green-100 text-green-700" },
+    ],
+  },
+  {
+    title: "Complaint handling v2",
+    status: "Testing",
+    statusColor: "text-amber-600",
+    date: "Jan 14, 2025",
+    description: "Better escalation paths for complex issues",
+    tags: [
+      { label: "Reduced response time", color: "bg-blue-100 text-blue-700" },
+    ],
+    extra: "+2 more changes",
+  },
+  {
+    title: "Product inquiry update",
+    status: "Draft",
+    statusColor: "text-gray-500",
+    date: "Jan 13, 2025",
+    description: "Added detailed product specifications",
+    tags: [
+      { label: "Feature update", color: "bg-purple-100 text-purple-700" },
+    ],
+  },
+];
+
+const categories = [
+  { icon: Building2, label: "Banking & Finance" },
+  { icon: ShoppingCart, label: "E-commerce" },
+  { icon: Headphones, label: "Customer Support" },
+  { icon: Users, label: "HR & Recruitment" },
+  { icon: Plane, label: "Travel & Hospitality" },
+  { icon: Heart, label: "Healthcare" },
+  { icon: GraduationCap, label: "Education" },
+  { icon: Home, label: "Real Estate" },
+];
 
 const Index = () => {
   const [messages, setMessages] = useState<ReceivedMessage[]>([]);
