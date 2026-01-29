@@ -16,13 +16,13 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 
-interface ReceivedMessage {
-  id: number;
-  origin: string;
-  data: unknown;
-  timestamp: Date;
-  isValid: boolean;
-}
+// interface ReceivedMessage {
+//   id: number;
+//   origin: string;
+//   data: unknown;
+//   timestamp: Date;
+//   isValid: boolean;
+// }
 
 const ALLOWED_ORIGINS: string[] = ["*"];
 
@@ -30,124 +30,77 @@ const Index = () => {
   const [messages, setMessages] = useState<ReceivedMessage[]>([]);
   const [promptContent, setPromptContent] = useState("");
 
-  const isOriginAllowed = (origin: string): boolean => {
-    if (ALLOWED_ORIGINS.includes("*")) return true;
-    return ALLOWED_ORIGINS.includes(origin);
-  };
+  // const isOriginAllowed = (origin: string): boolean => {
+  //   if (ALLOWED_ORIGINS.includes("*")) return true;
+  //   return ALLOWED_ORIGINS.includes(origin);
+  // };
 
-  const sendAcknowledgment = useCallback((origin: string) => {
-    const ackMessage = {
-      type: "ACK",
-      message: "Message received successfully",
-      timestamp: new Date().toISOString(),
-    };
+  // const sendAcknowledgment = useCallback((origin: string) => {
+  //   const ackMessage = {
+  //     type: "ACK",
+  //     message: "Message received successfully",
+  //     timestamp: new Date().toISOString(),
+  //   };
 
-    try {
-      if (window.parent && window.parent !== window) {
-        window.parent.postMessage(ackMessage, origin === "*" ? "*" : origin);
-      } else if (window.opener) {
-        window.opener.postMessage(ackMessage, origin === "*" ? "*" : origin);
-      }
-    } catch (error) {
-      console.error("Failed to send ACK:", error);
-    }
-  }, []);
+  //   try {
+  //     if (window.parent && window.parent !== window) {
+  //       window.parent.postMessage(ackMessage, origin === "*" ? "*" : origin);
+  //       console.log("📤 ACK sent to parent:", ackMessage);
+  //     } else if (window.opener) {
+  //       window.opener.postMessage(ackMessage, origin === "*" ? "*" : origin);
+  //       console.log("📤 ACK sent to opener:", ackMessage);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to send ACK:", error);
+  //   }
+  // }, []);
 
-  const handleMessage = useCallback(
-    (event: MessageEvent) => {
-      const isValid = isOriginAllowed(event.origin);
+  // const handleMessage = useCallback(
+  //   (event: MessageEvent) => {
+  //     const isValid = isOriginAllowed(event.origin);
 
-      const receivedMessage: ReceivedMessage = {
-        id: Date.now(),
-        origin: event.origin,
-        data: event.data,
-        timestamp: new Date(),
-        isValid,
-      };
+  //     const receivedMessage: ReceivedMessage = {
+  //       id: Date.now(),
+  //       origin: event.origin,
+  //       data: event.data,
+  //       timestamp: new Date(),
+  //       isValid,
+  //     };
 
-      console.log("📨 Message received:", {
-        origin: event.origin,
-        data: event.data,
-        isValid,
-      });
+  //     console.log("📨 Message received:", {
+  //       origin: event.origin,
+  //       data: event.data,
+  //       isValid,
+  //     });
 
-      setMessages((prev) => [receivedMessage, ...prev].slice(0, 50));
-      
-      // Update prompt content with received message
-      try {
-        const formatted = JSON.stringify(event.data, null, 2);
-        setPromptContent(formatted);
-      } catch {
-        setPromptContent(String(event.data));
-      }
+  //     setMessages((prev) => [receivedMessage, ...prev].slice(0, 50));
 
-      if (isValid) {
-        sendAcknowledgment(event.origin);
-      }
-    },
-    [sendAcknowledgment]
-  );
+  //     if (isValid) {
+  //       sendAcknowledgment(event.origin);
+  //     }
+  //   },
+  //   [sendAcknowledgment]
+  // );
 
-  useEffect(() => {
-    window.addEventListener("message", handleMessage);
-    console.log("🎧 Message listener active");
+  // useEffect(() => {
+  //   window.addEventListener("message", handleMessage);
+  //   setIsListening(true);
+  //   console.log("🎧 Message listener active");
 
-    return () => {
-      window.removeEventListener("message", handleMessage);
-      console.log("🔇 Message listener removed");
-    };
-  }, [handleMessage]);
+  //   return () => {
+  //     window.removeEventListener("message", handleMessage);
+  //     setIsListening(false);
+  //     console.log("🔇 Message listener removed");
+  //   };
+  // }, [handleMessage]);
 
-  const categories = [
-    { icon: Building2, label: "Banking & Finance" },
-    { icon: ShoppingCart, label: "Sales Enquiry" },
-    { icon: Headphones, label: "Customer Support" },
-    { icon: Users, label: "Lead Generation" },
-    { icon: ShoppingCart, label: "E-Commerce" },
-    { icon: Plane, label: "Travel & Hospitality" },
-    { icon: Heart, label: "Healthcare" },
-    { icon: GraduationCap, label: "Education" },
-    { icon: Home, label: "Real Estate" },
-  ];
-
-  const historyItems = [
-    {
-      title: "Test Run - 18:31:59",
-      status: "TESTED",
-      statusColor: "text-destructive",
-      score: "Score: 100%",
-      date: "Jan 28, 2026, 06:31 PM",
-      description: "You are an AI assistant specialized in providing helpf...",
-      metrics: { p: 21, u: "100%" },
-      tags: [
-        { label: "Happy Path: Single Open Order Enquiry & ETA", color: "bg-accent text-primary" },
-        { label: "Edge Case: Multiple Open Orders & Rescheduling with Unavailable Slot", color: "bg-accent text-primary" },
-      ],
-      extra: "+3",
-    },
-    {
-      title: "AI Optimized - 18:27:55",
-      status: "OPTIMIZED",
-      statusColor: "text-secondary",
-      date: "Jan 28, 2026, 06:27 PM",
-      description: "You are an AI assistant specialized in providing helpf...",
-      tags: [{ label: "support", color: "bg-accent text-primary" }],
-    },
-    {
-      title: "Test Run - 18:24:28",
-      status: "TESTED",
-      statusColor: "text-destructive",
-      score: "Score: 64%",
-      date: "Jan 28, 2026, 06:24 PM",
-      description: "You are an AI assistant specialized in providing helpf...",
-      metrics: { p: 35, u: "64%" },
-      tags: [
-        { label: "Happy Path: Multiple 'Yet to be delivered' Orders Enquiry", color: "bg-accent text-primary" },
-        { label: "Edge Case: Reschedule Request with Unavailable Preferred Slot", color: "bg-accent text-primary" },
-      ],
-      extra: "+4",
-    },
-  ];
+  // const formatData = (data: unknown): string => {
+  //   try {
+  //     return JSON.stringify(data, null, 2);
+  //   } catch {
+  //     return String(data);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
