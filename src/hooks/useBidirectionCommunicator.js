@@ -52,3 +52,5 @@ const useBidirectionCommunicator = () => {
 
   return {isConnected , message:lastMessage ,send:sendToParent };
 };
+
+export default useBidirectionCommunicator;
