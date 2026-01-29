@@ -2,13 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-interface ReceivedMessage {
-  id: number;
-  origin: string;
-  data: unknown;
-  timestamp: Date;
-  isValid: boolean;
-}
+// interface ReceivedMessage {
+//   id: number;
+//   origin: string;
+//   data: unknown;
+//   timestamp: Date;
+//   isValid: boolean;
+// }
 
 // Configure allowed origins - for demo purposes, allow all origins
 // In production, replace with specific parent app origin(s)
@@ -18,77 +18,77 @@ const Index = () => {
   const [messages, setMessages] = useState<ReceivedMessage[]>([]);
   const [isListening, setIsListening] = useState(false);
 
-  const isOriginAllowed = (origin: string): boolean => {
-    if (ALLOWED_ORIGINS.includes("*")) return true;
-    return ALLOWED_ORIGINS.includes(origin);
-  };
+  // const isOriginAllowed = (origin: string): boolean => {
+  //   if (ALLOWED_ORIGINS.includes("*")) return true;
+  //   return ALLOWED_ORIGINS.includes(origin);
+  // };
 
-  const sendAcknowledgment = useCallback((origin: string) => {
-    const ackMessage = {
-      type: "ACK",
-      message: "Message received successfully",
-      timestamp: new Date().toISOString(),
-    };
+  // const sendAcknowledgment = useCallback((origin: string) => {
+  //   const ackMessage = {
+  //     type: "ACK",
+  //     message: "Message received successfully",
+  //     timestamp: new Date().toISOString(),
+  //   };
 
-    try {
-      if (window.parent && window.parent !== window) {
-        window.parent.postMessage(ackMessage, origin === "*" ? "*" : origin);
-        console.log("📤 ACK sent to parent:", ackMessage);
-      } else if (window.opener) {
-        window.opener.postMessage(ackMessage, origin === "*" ? "*" : origin);
-        console.log("📤 ACK sent to opener:", ackMessage);
-      }
-    } catch (error) {
-      console.error("Failed to send ACK:", error);
-    }
-  }, []);
+  //   try {
+  //     if (window.parent && window.parent !== window) {
+  //       window.parent.postMessage(ackMessage, origin === "*" ? "*" : origin);
+  //       console.log("📤 ACK sent to parent:", ackMessage);
+  //     } else if (window.opener) {
+  //       window.opener.postMessage(ackMessage, origin === "*" ? "*" : origin);
+  //       console.log("📤 ACK sent to opener:", ackMessage);
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to send ACK:", error);
+  //   }
+  // }, []);
 
-  const handleMessage = useCallback(
-    (event: MessageEvent) => {
-      const isValid = isOriginAllowed(event.origin);
+  // const handleMessage = useCallback(
+  //   (event: MessageEvent) => {
+  //     const isValid = isOriginAllowed(event.origin);
 
-      const receivedMessage: ReceivedMessage = {
-        id: Date.now(),
-        origin: event.origin,
-        data: event.data,
-        timestamp: new Date(),
-        isValid,
-      };
+  //     const receivedMessage: ReceivedMessage = {
+  //       id: Date.now(),
+  //       origin: event.origin,
+  //       data: event.data,
+  //       timestamp: new Date(),
+  //       isValid,
+  //     };
 
-      console.log("📨 Message received:", {
-        origin: event.origin,
-        data: event.data,
-        isValid,
-      });
+  //     console.log("📨 Message received:", {
+  //       origin: event.origin,
+  //       data: event.data,
+  //       isValid,
+  //     });
 
-      setMessages((prev) => [receivedMessage, ...prev].slice(0, 50));
+  //     setMessages((prev) => [receivedMessage, ...prev].slice(0, 50));
 
-      if (isValid) {
-        sendAcknowledgment(event.origin);
-      }
-    },
-    [sendAcknowledgment]
-  );
+  //     if (isValid) {
+  //       sendAcknowledgment(event.origin);
+  //     }
+  //   },
+  //   [sendAcknowledgment]
+  // );
 
-  useEffect(() => {
-    window.addEventListener("message", handleMessage);
-    setIsListening(true);
-    console.log("🎧 Message listener active");
+  // useEffect(() => {
+  //   window.addEventListener("message", handleMessage);
+  //   setIsListening(true);
+  //   console.log("🎧 Message listener active");
 
-    return () => {
-      window.removeEventListener("message", handleMessage);
-      setIsListening(false);
-      console.log("🔇 Message listener removed");
-    };
-  }, [handleMessage]);
+  //   return () => {
+  //     window.removeEventListener("message", handleMessage);
+  //     setIsListening(false);
+  //     console.log("🔇 Message listener removed");
+  //   };
+  // }, [handleMessage]);
 
-  const formatData = (data: unknown): string => {
-    try {
-      return JSON.stringify(data, null, 2);
-    } catch {
-      return String(data);
-    }
-  };
+  // const formatData = (data: unknown): string => {
+  //   try {
+  //     return JSON.stringify(data, null, 2);
+  //   } catch {
+  //     return String(data);
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-background p-4 md:p-8">
