@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { ChevronLeft, Play, Sparkles, Edit3, AlertTriangle, Settings2, Globe, ChevronDown, Building2, ShoppingCart, Headphones, Users, Plane, Heart, GraduationCap, Home, Filter, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +15,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import useBidirectionCommunicator from "@/hooks/useBidirectionCommunicator";
 
 interface ReceivedMessage {
   id: number;
@@ -74,6 +75,36 @@ const categories = [
 const Index = () => {
   const [messages, setMessages] = useState<ReceivedMessage[]>([]);
   const [promptContent, setPromptContent] = useState("");
+  
+  const { isConnected, message, send } = useBidirectionCommunicator();
+
+  // When a new message arrives, display it and send acknowledgment
+  useEffect(() => {
+    if (message) {
+      console.log("📨 Received from parent:", message);
+      
+      // Format and display the message in the prompt textarea
+      const formattedData = JSON.stringify(message, null, 2);
+      setPromptContent(formattedData);
+      
+      // Send acknowledgment back to parent
+      send({
+        type: "ACK",
+        payload: {
+          received: true,
+          timestamp: new Date().toISOString(),
+          messageType: message?.type || "unknown",
+          status: "Message received successfully by iframe"
+        }
+      });
+      console.log("📤 Sent ACK back to parent");
+    }
+  }, [message, send]);
+
+  // Log connection status
+  useEffect(() => {
+    console.log("🔌 Connection status:", isConnected ? "CONNECTED" : "DISCONNECTED");
+  }, [isConnected]);
 
   // const isOriginAllowed = (origin: string): boolean => {
   //   if (ALLOWED_ORIGINS.includes("*")) return true;
