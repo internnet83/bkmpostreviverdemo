@@ -10,23 +10,13 @@ const AuthProvider = ({ children }) => {
         if(isConnected){
             console.log("AuthProvider message from parent 0" , message)
             if(message.type  === "INIT_CHANNEL"){
-                console.log("AuthProvider message from parent 1" , message.payload)
+                console.log("AuthProvider message from parent 1", message.payload)
 
-                let payload = {}
-                if(message.payload.isOpenInKapture){
-                    payload = {
-                        auth_key:message.payload?.auth?._KAPTURECRM_SESSION,
-                    }
-                }else{
-                    payload = {
-                        auth_key : message.payload?.auth?.MS_SESSION,
-                        vitos_auth_key:message.payload?.auth?.VITOS_ACCESS_TOKEN,
-                    }
-                }
 
-                console.log("AuthProvider message from parent 2" ,payload)
+              
 
-                currentProfileDetails({...payload}).then((response)=>{
+
+                currentProfileDetails(message.payload?.auth || {}).then((response)=>{
                     console.log("currentProfileDetails :-",response);
                 }).catch((error)=>{
                     console.log("currentProfileDetails :-",error);
