@@ -12,11 +12,12 @@ const AuthProvider = ({ children }) => {
             if(message.type  === "INIT_CHANNEL"){
                 console.log("AuthProvider message from parent 1", message.payload)
 
+                const initAuthPayload = message.payload?.auth || {};
 
-              
+                console.log("AuthProvider message from parent 2", initAuthPayload)
 
 
-                currentProfileDetails(message.payload?.auth || {}).then((response)=>{
+                currentProfileDetails(initAuthPayload).then((response)=>{
                     console.log("currentProfileDetails :-",response);
                 }).catch((error)=>{
                     console.log("currentProfileDetails :-",error);
