@@ -1,22 +1,79 @@
 import { useState, useEffect, useCallback } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ChevronLeft, Play, Sparkles, Edit3, AlertTriangle, Settings2, Globe, ChevronDown, Building2, ShoppingCart, Headphones, Users, Plane, Heart, GraduationCap, Home, Filter, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
-// interface ReceivedMessage {
-//   id: number;
-//   origin: string;
-//   data: unknown;
-//   timestamp: Date;
-//   isValid: boolean;
-// }
+interface ReceivedMessage {
+  id: number;
+  origin: string;
+  data: unknown;
+  timestamp: Date;
+  isValid: boolean;
+}
 
-// Configure allowed origins - for demo purposes, allow all origins
-// In production, replace with specific parent app origin(s)
-const ALLOWED_ORIGINS: string[] = ["*"]; // Use ["https://your-parent-app.com"] in production
+const historyItems = [
+  {
+    title: "Enhanced greeting flow",
+    status: "Active",
+    statusColor: "text-green-600",
+    score: "Score: 94/100",
+    date: "Jan 15, 2025",
+    description: "Improved user engagement with personalized greetings",
+    metrics: { p: "0.92", u: "0.88" },
+    tags: [
+      { label: "High conversion rate", color: "bg-green-100 text-green-700" },
+    ],
+  },
+  {
+    title: "Complaint handling v2",
+    status: "Testing",
+    statusColor: "text-amber-600",
+    date: "Jan 14, 2025",
+    description: "Better escalation paths for complex issues",
+    tags: [
+      { label: "Reduced response time", color: "bg-blue-100 text-blue-700" },
+    ],
+    extra: "+2 more changes",
+  },
+  {
+    title: "Product inquiry update",
+    status: "Draft",
+    statusColor: "text-gray-500",
+    date: "Jan 13, 2025",
+    description: "Added detailed product specifications",
+    tags: [
+      { label: "Feature update", color: "bg-purple-100 text-purple-700" },
+    ],
+  },
+];
+
+const categories = [
+  { icon: Building2, label: "Banking & Finance" },
+  { icon: ShoppingCart, label: "E-commerce" },
+  { icon: Headphones, label: "Customer Support" },
+  { icon: Users, label: "HR & Recruitment" },
+  { icon: Plane, label: "Travel & Hospitality" },
+  { icon: Heart, label: "Healthcare" },
+  { icon: GraduationCap, label: "Education" },
+  { icon: Home, label: "Real Estate" },
+];
 
 const Index = () => {
   const [messages, setMessages] = useState<ReceivedMessage[]>([]);
-  const [isListening, setIsListening] = useState(false);
+  const [promptContent, setPromptContent] = useState("");
 
   // const isOriginAllowed = (origin: string): boolean => {
   //   if (ALLOWED_ORIGINS.includes("*")) return true;
@@ -91,104 +148,220 @@ const Index = () => {
   // };
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="mx-auto max-w-3xl space-y-6">
-        {/* Header */}
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <h1 className="font-mono text-xl font-semibold text-foreground">
-              postMessage Receiver
-            </h1>
-            <Badge
-              variant={isListening ? "default" : "secondary"}
-              className="font-mono text-xs"
-            >
-              <span
-                className={`mr-1.5 inline-block h-2 w-2 rounded-full ${
-                  isListening ? "bg-primary animate-pulse-glow" : "bg-muted-foreground"
-                }`}
-              />
-              {isListening ? "Listening" : "Inactive"}
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Header */}
+      <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" className="text-muted-foreground">
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-primary" />
+            <span className="font-semibold text-foreground">Prompt Playground</span>
+          </div>
+        </div>
+        <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
+          <Play className="h-4 w-4" />
+          Test Prompt
+        </Button>
+      </header>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Left Sidebar - Prompt History */}
+        <aside className="w-56 border-r border-border bg-card flex flex-col">
+          <div className="p-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-primary" />
+              <div>
+                <div className="font-medium text-foreground text-sm">Prompt History</div>
+                <div className="text-xs text-muted-foreground">{messages.length > 0 ? `${messages.length} messages` : "20 versions"}</div>
+              </div>
+            </div>
+            <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+              <Filter className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <div className="flex-1 overflow-auto px-3 pb-3 space-y-3">
+            {historyItems.map((item, index) => (
+              <div key={index} className="bg-background border border-border rounded-lg p-3 space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="text-xs font-medium text-foreground leading-tight">{item.title}</div>
+                  <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${item.statusColor} border-current`}>
+                    {item.status}
+                  </Badge>
+                </div>
+                {item.score && <div className="text-xs font-medium text-foreground">{item.score}</div>}
+                <div className="text-[10px] text-muted-foreground">{item.date}</div>
+                <div className="text-[10px] text-muted-foreground leading-relaxed">{item.description}</div>
+                {item.metrics && (
+                  <div className="flex gap-2">
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-muted-foreground">
+                      P {item.metrics.p}
+                    </Badge>
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0 text-muted-foreground">
+                      U {item.metrics.u}
+                    </Badge>
+                  </div>
+                )}
+                <div className="space-y-1">
+                  {item.tags.map((tag, tagIndex) => (
+                    <div key={tagIndex} className={`text-[10px] px-2 py-1 rounded ${tag.color} leading-tight`}>
+                      {tag.label}
+                    </div>
+                  ))}
+                  {item.extra && (
+                    <div className="text-[10px] text-muted-foreground">{item.extra}</div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main className="flex-1 overflow-auto p-6 space-y-6">
+          {/* Action Buttons */}
+          <div className="flex items-center justify-between">
+            <div className="flex gap-3">
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground gap-2">
+                <Sparkles className="h-4 w-4" />
+                Optimize with AI
+              </Button>
+              <Button variant="outline" className="gap-2 text-muted-foreground">
+                <Edit3 className="h-4 w-4" />
+                Optimize Manually
+              </Button>
+            </div>
+            <Badge variant="outline" className="text-destructive border-destructive gap-1.5 px-3 py-1.5">
+              <AlertTriangle className="h-4 w-4" />
+              Setup Required
             </Badge>
           </div>
-          <p className="font-mono text-sm text-muted-foreground">
-            Embed this app in an iframe or popup to receive messages via{" "}
-            <code className="rounded bg-secondary px-1.5 py-0.5 text-accent">
-              window.postMessage()
-            </code>
-          </p>
-        </div>
 
-        {/* Messages Container */}
-        <Card className="border-border bg-card">
-          <CardHeader className="border-b border-border pb-3">
-            <CardTitle className="font-mono text-sm font-medium text-muted-foreground">
-              Received Messages ({messages.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            {messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-16 text-center">
-                <div className="mb-3 font-mono text-4xl opacity-30">📭</div>
-                <p className="font-mono text-sm text-muted-foreground">
-                  No messages received yet
-                </p>
-                <p className="mt-1 font-mono text-xs text-muted-foreground/70">
-                  Waiting for postMessage from parent window...
-                </p>
-              </div>
-            ) : (
-              <div className="divide-y divide-border">
-                {messages.map((msg) => (
-                  <div key={msg.id} className="p-4 space-y-3">
-                    {/* Message Header */}
-                    <div className="flex flex-wrap items-center gap-2 text-xs">
-                      <Badge
-                        variant={msg.isValid ? "default" : "destructive"}
-                        className="font-mono"
-                      >
-                        {msg.isValid ? "✓ Valid" : "✗ Blocked"}
-                      </Badge>
-                      <span className="font-mono text-muted-foreground">
-                        from{" "}
-                        <code className="rounded bg-secondary px-1.5 py-0.5 text-foreground">
-                          {msg.origin || "null"}
-                        </code>
-                      </span>
-                      <span className="font-mono text-muted-foreground/70">
-                        {msg.timestamp.toLocaleTimeString()}
-                      </span>
+          {/* Models Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Settings2 className="h-4 w-4 text-muted-foreground" />
+              <span className="font-medium text-foreground">Models</span>
+            </div>
+            <div className="flex gap-3">
+              <Select defaultValue="vitos">
+                <SelectTrigger className="w-40 bg-card">
+                  <SelectValue placeholder="Select Model" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="vitos">
+                    <div className="flex items-center gap-2">
+                      <Settings2 className="h-4 w-4" />
+                      Vitos
                     </div>
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <Select>
+                <SelectTrigger className="w-44 bg-card">
+                  <SelectValue placeholder="Select Version" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="v1">Version 1</SelectItem>
+                  <SelectItem value="v2">Version 2</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
 
-                    {/* Message Data */}
-                    <pre className="overflow-x-auto rounded-md bg-secondary/50 p-3 font-mono text-sm text-foreground">
-                      {formatData(msg.data)}
-                    </pre>
-                  </div>
-                ))}
+          {/* Prompt Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Edit3 className="h-4 w-4 text-primary" />
+              <span className="font-medium text-foreground">Prompt</span>
+            </div>
+            <Textarea
+              placeholder="Enter your prompt here... Describe what you want your AI assistant to do."
+              className="min-h-[200px] bg-card border-border resize-none text-foreground placeholder:text-muted-foreground"
+              value={promptContent}
+              onChange={(e) => setPromptContent(e.target.value)}
+            />
+          </div>
+
+          {/* Categories Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="font-medium text-foreground">Categories</span>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              {categories.map((category, index) => (
+                <Button
+                  key={index}
+                  variant="outline"
+                  className="justify-start gap-3 h-11 bg-card text-muted-foreground hover:text-foreground hover:bg-accent"
+                >
+                  <category.icon className="h-4 w-4" />
+                  {category.label}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </main>
+
+        {/* Right Sidebar */}
+        <aside className="w-64 border-l border-border bg-card flex flex-col">
+          {/* Tabs */}
+          <div className="flex border-b border-border">
+            <button className="flex-1 px-4 py-3 text-sm font-medium text-primary border-b-2 border-primary flex items-center justify-center gap-2">
+              <Settings2 className="h-4 w-4" />
+              Other Details
+            </button>
+            <button className="flex-1 px-4 py-3 text-sm font-medium text-muted-foreground flex items-center justify-center gap-2">
+              <Edit3 className="h-4 w-4" />
+              Guidelines
+            </button>
+          </div>
+
+          <div className="p-4 space-y-4">
+            {/* Language Section */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4 text-primary" />
+                <span className="font-medium text-foreground text-sm">Language</span>
               </div>
-            )}
-          </CardContent>
-        </Card>
+              <Select defaultValue="auto">
+                <SelectTrigger className="w-full bg-background">
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-4 w-4 text-muted-foreground" />
+                    <SelectValue placeholder="Select Language" />
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="auto">Auto-detect</SelectItem>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="es">Spanish</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                The AI will automatically detect and respond in the user's language.
+              </p>
+            </div>
 
-        {/* Usage Instructions */}
-        <Card className="border-border bg-card/50">
-          <CardHeader className="pb-3">
-            <CardTitle className="font-mono text-sm font-medium text-muted-foreground">
-              Usage Example
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <pre className="overflow-x-auto rounded-md bg-secondary/50 p-4 font-mono text-xs text-foreground">
-{`// From parent window
-const iframe = document.querySelector('iframe');
-iframe.contentWindow.postMessage({
-  type: "TEST_MESSAGE",
-  message: "Hello from parent app"
-}, "*");`}
-            </pre>
-          </CardContent>
-        </Card>
+            {/* Advanced Settings */}
+            <Collapsible>
+              <CollapsibleTrigger className="flex items-center justify-between w-full py-2">
+                <div className="flex items-center gap-2">
+                  <Settings2 className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium text-foreground text-sm">Advanced Settings</span>
+                </div>
+                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+              </CollapsibleTrigger>
+              <CollapsibleContent className="pt-2 space-y-2">
+                <p className="text-xs text-muted-foreground">
+                  Configure advanced model parameters here.
+                </p>
+              </CollapsibleContent>
+            </Collapsible>
+          </div>
+        </aside>
       </div>
     </div>
   );
