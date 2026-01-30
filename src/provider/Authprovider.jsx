@@ -15,12 +15,12 @@ const AuthProvider = ({ children }) => {
                 let payload = {}
                 if(message.payload.isOpenInKapture){
                     payload = {
-                        auth_key:message.payload.auth._KAPTURECRM_SESSION,
+                        auth_key:message.payload?.auth?._KAPTURECRM_SESSION,
                     }
                 }else{
                     payload = {
-                        auth_key : message.payload.auth.MS_SESSION,
-                        vitos_auth_key:message.payload.auth.VITOS_ACCESS_TOKEN,
+                        auth_key : message.payload?.auth?.MS_SESSION,
+                        vitos_auth_key:message.payload?.auth?.VITOS_ACCESS_TOKEN,
                     }
                 }
 
