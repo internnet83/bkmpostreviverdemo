@@ -8,9 +8,9 @@ const AuthProvider = ({ children }) => {
 
     useEffect(()=>{
         if(isConnected){
-            console.log("AuthProvider message from parent" , message)
+            console.log("AuthProvider message from parent 0" , message)
             if(message.type  === "INIT_CHANNEL"){
-                console.log("AuthProvider message from parent" , message.payload)
+                console.log("AuthProvider message from parent 1" , message.payload)
 
                 let payload = {}
                 if(message.payload.isOpenInKapture){
@@ -24,7 +24,7 @@ const AuthProvider = ({ children }) => {
                     }
                 }
 
-                console.log("AuthProvider message from parent" ,payload)
+                console.log("AuthProvider message from parent 2" ,payload)
 
                 currentProfileDetails(payload).then((response)=>{
                     console.log("currentProfileDetails :-",response);
