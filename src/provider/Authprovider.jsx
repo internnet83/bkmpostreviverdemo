@@ -26,7 +26,7 @@ const AuthProvider = ({ children }) => {
 
                 console.log("AuthProvider message from parent 2" ,payload)
 
-                currentProfileDetails(payload).then((response)=>{
+                currentProfileDetails({...payload}).then((response)=>{
                     console.log("currentProfileDetails :-",response);
                 }).catch((error)=>{
                     console.log("currentProfileDetails :-",error);
